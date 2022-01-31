@@ -9,6 +9,7 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
+        System.out.println("ur mom");
 
         // SaveAndDisplayExample();
 
