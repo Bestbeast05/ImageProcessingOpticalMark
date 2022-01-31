@@ -9,8 +9,7 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
-        System.out.println(" ur mom");
-        System.out.println("ur  mom");
+        System.out.println("ur mom");
         // SaveAndDisplayExample();
 
         RunTheFilter();
@@ -20,7 +19,6 @@ public class FilterTest {
         System.out.println("Loading pdf....");
         PImage in = PDFHelper.getPageImage("assets/omrtest.pdf",1);
         DImage img = new DImage(in);       // you can make a DImage from a PImage
-
         System.out.println("Running filter on page 1....");
         DisplayInfoFilter filter = new DisplayInfoFilter();
         filter.processImage(img);  // if you want, you can make a different method
