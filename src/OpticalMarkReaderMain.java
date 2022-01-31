@@ -1,3 +1,5 @@
+import core.DImage;
+
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -10,17 +12,20 @@ public class OpticalMarkReaderMain {
         String fileContents = readFile("omrtest.pdf");
 
 
+       readFile("C:\Users\adame\IdeaProjects\ImageProcessingOpticalMark\assets\omrtest.pdf");
         /*
         Your code here to...
         (1).  Load the pdf
+
         (2).  Loop over its pages
         (3).  Create a DImage from each page and process its pixels
+
         (4).  Output 2 csv files
          */
 
     }
-    public static String readFile(String filePath) {
-        StringBuilder sb = new StringBuilder();
+    public static DImage readFile(String filePath) {
+         sb = new StringBuilder();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(filePath));) {
 
