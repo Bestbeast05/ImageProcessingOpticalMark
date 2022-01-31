@@ -11,7 +11,7 @@ public class FilterTest {
     public static void main(String[] args) {
 
         // SaveAndDisplayExample();
-        System.out.println(5);
+
         RunTheFilter();
     }
 
