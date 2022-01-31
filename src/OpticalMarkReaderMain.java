@@ -3,8 +3,9 @@ import java.io.File;
 
 public class OpticalMarkReaderMain {
     public static void main(String[] args) {
-        String pathToPdf = fileChooser();
+        String pathToPdf = fileChooser("omrtest.pdf");
         System.out.println("Loading pdf at " + pathToPdf);
+
 
         /*
         Your code here to...
@@ -16,7 +17,7 @@ public class OpticalMarkReaderMain {
 
     }
 
-    private static String fileChooser() {
+    private static String fileChooser(String s) {
         String userDirLocation = System.getProperty("user.dir");
         File userDir = new File(userDirLocation);
         JFileChooser fc = new JFileChooser(userDir);
