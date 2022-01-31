@@ -9,6 +9,8 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
+        System.out.println(" ur mom");
+        System.out.println("ur  mom");
         // SaveAndDisplayExample();
 
         RunTheFilter();
@@ -25,6 +27,7 @@ public class FilterTest {
                                    // that does the image processing an returns a DTO with
                                    // the information you want
     }
+
 
     private static void SaveAndDisplayExample() {
         PImage img = PDFHelper.getPageImage("assets/omrtest.pdf",1);
