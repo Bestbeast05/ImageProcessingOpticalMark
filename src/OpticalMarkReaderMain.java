@@ -25,6 +25,5 @@ public class OpticalMarkReaderMain {
         return file.getAbsolutePath();
 
 
-        System.out.println("your mom");
     }
 }
