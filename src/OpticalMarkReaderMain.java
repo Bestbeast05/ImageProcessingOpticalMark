@@ -23,5 +23,8 @@ public class OpticalMarkReaderMain {
         int returnVal = fc.showOpenDialog(null);
         File file = fc.getSelectedFile();
         return file.getAbsolutePath();
+
+
+        System.out.println("your mom");
     }
 }
