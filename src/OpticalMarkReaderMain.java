@@ -24,23 +24,8 @@ public class OpticalMarkReaderMain {
          */
 
     }
-    public static DImage readFile(String filePath) {
-         sb = new StringBuilder();
-
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(filePath));) {
-
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.getProperty("line.separator"));
-                line = br.readLine();
-            }
-
-        } catch (Exception errorObj) {
-            System.err.println("There was a problem reading the " + filePath);
-        }
-
-        return sb.toString();
+    public static String readFile(String fileName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(fileName)));
     }
 
     public static void writeToFile(String filePath, String data) {
