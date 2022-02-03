@@ -20,12 +20,12 @@ public class FilterTest {
 
     private static ArrayList<DImage> RunTheFilter(String filepath) {
         System.out.println("Loading pdf....");
-        ArrayList<DImage> images =new ArrayList<DImage>();
+        ArrayList<DImage> images = new ArrayList<>();
 
 
        ArrayList<PImage> inimage  = PDFHelper.getPImagesFromPdf(filepath);
-        for (int i = 0; i < inimage.size(); i++) {
-            images.add(new DImage(inimage.get(i)));
+        for (PImage pImage : inimage) {
+            images.add(new DImage(pImage));
 
 
         }
@@ -34,12 +34,13 @@ public class FilterTest {
                                    // the information you want
     }
 
-    public int blackcpixelsinregion (short [][] inputarray , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int inputrow, int inputcol, int numOptions,int distanceToFirstQuestion) {
+    public int blackcpixelsinregion (short [][] inputarray , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int inputrow, int inputcol, int numOptions,int distanceToFirstQuestionhorizontal) {
         int blackpixels = 0;
         int blackcounter = 0;
         int storedquadrant =0;
         int storedwor = 0;
                 for (int k = inputrow; k < inputrow + thresholdbwtnquestions; k++) {
+
 
 
                     for (int x = inputcol; x < inputcol + thresholdbwtwnsolutions; x++) {
@@ -54,7 +55,7 @@ public class FilterTest {
                     if(blackcounter>blackpixels) {
                         blackpixels = blackcounter;
 
-                        storedquadrant = (inputarray[0].length - distanceToFirstQuestion) / numOptions*storedwor;
+                        storedquadrant = (inputarray[0].length - distanceToFirstQuestionhorizontal) / numOptions*storedwor;
                     }
 
 
@@ -64,11 +65,9 @@ public class FilterTest {
 
 
     public ArrayList<Integer> readQuestions(String filepath , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestion, int numOptions){
-        DImage getquestions=RunTheFilter("assets/omrtest.pdf").get(0);
+        DImage getquestions=RunTheFilter(filepath).get(0);
         ArrayList<Integer> answerkey= new ArrayList<>();
         short[][]inputarray=getquestions.getBWPixelGrid();
-        int storedquadrant=0;
-        int blackpixels=0;
         for(int i=0;i<inputarray.length;i+=thresholdbwtnquestions) {
 
 
@@ -95,11 +94,4 @@ public class FilterTest {
 
     }
 
-
-    private static void SaveAndDisplayExample() {
-        PImage img = PDFHelper.getPageImage("assets/omrtest.pdf",1);
-        img.save(currentFolder + "assets/page1.png");
-
-        DisplayWindow.showFor("assets/page1.png");
-    }
 }
