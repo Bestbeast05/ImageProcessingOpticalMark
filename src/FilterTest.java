@@ -15,28 +15,83 @@ public class FilterTest {
 
         // SaveAndDisplayExample();
 
-        RunTheFilter();
+        RunTheFilter("assets/omrtest.pdf");
     }
 
-    private static void RunTheFilter() {
+    private static ArrayList<DImage> RunTheFilter(String filepath) {
         System.out.println("Loading pdf....");
         ArrayList<DImage> images =new ArrayList<DImage>();
 
 
-       ArrayList<PImage> inimage  = PDFHelper.getPImagesFromPdf("assets/omrtest.pdf");
+       ArrayList<PImage> inimage  = PDFHelper.getPImagesFromPdf(filepath);
         for (int i = 0; i < inimage.size(); i++) {
             images.add(new DImage(inimage.get(i)));
-            DisplayInfoFilter filter = new DisplayInfoFilter();
-
-            filter.processImage(images.get(i));  // if you want, you can make a different method
 
 
         }
+        return images;
                                    // that does the image processing an returns a DTO with
                                    // the information you want
     }
 
-    public DImage readQuestions(DImage image){
+    public int blackcpixelsinregion (short [][] inputarray , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int inputrow, int inputcol, int numOptions,int distanceToFirstQuestion) {
+        int blackpixels = 0;
+        int blackcounter = 0;
+        int storedquadrant =0;
+        int storedwor = 0;
+                for (int k = inputrow; k < inputrow + thresholdbwtnquestions; k++) {
+
+
+                    for (int x = inputcol; x < inputcol + thresholdbwtwnsolutions; x++) {
+                        if (inputarray[k][x] < 150) {
+                            blackcounter++;
+                            storedwor=x;
+                        }
+
+
+
+                        }
+                    if(blackcounter>blackpixels) {
+                        blackpixels = blackcounter;
+
+                        storedquadrant = (inputarray[0].length - distanceToFirstQuestion) / numOptions*storedwor;
+                    }
+
+
+                    }
+                return storedquadrant;
+            }
+
+
+    public ArrayList<Integer> readQuestions(String filepath , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestion, int numOptions){
+        DImage getquestions=RunTheFilter("assets/omrtest.pdf").get(0);
+        ArrayList<Integer> answerkey= new ArrayList<>();
+        short[][]inputarray=getquestions.getBWPixelGrid();
+        int storedquadrant=0;
+        int blackpixels=0;
+        for(int i=0;i<inputarray.length;i+=thresholdbwtnquestions) {
+
+
+            for (int j = 0; j < inputarray[i].length - (j + thresholdbwtwnsolutions); j++) {
+               int answer = blackcpixelsinregion(inputarray,thresholdbwtnquestions,thresholdbwtwnsolutions,i,j,numOptions,distanceToFirstQuestion);
+               answerkey.add(answer);
+
+
+            }
+        }
+        return answerkey;
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 
