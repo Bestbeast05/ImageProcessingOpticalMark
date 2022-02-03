@@ -36,6 +36,10 @@ public class FilterTest {
                                    // the information you want
     }
 
+    public DImage readQuestions(DImage image){
+
+    }
+
 
     private static void SaveAndDisplayExample() {
         PImage img = PDFHelper.getPageImage("assets/omrtest.pdf",1);
