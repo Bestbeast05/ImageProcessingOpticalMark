@@ -64,15 +64,15 @@ public class FilterTest {
             }
 
 
-    public ArrayList<Integer> readQuestions(String filepath , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestion, int numOptions){
+    public ArrayList<Integer> readQuestions(String filepath , int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions,int distancetofirstquestionvertical){
         DImage getquestions=RunTheFilter(filepath).get(0);
         ArrayList<Integer> answerkey= new ArrayList<>();
         short[][]inputarray=getquestions.getBWPixelGrid();
-        for(int i=0;i<inputarray.length;i+=thresholdbwtnquestions) {
+        for(int i=distancetofirstquestionvertical;i<inputarray.length;i+=thresholdbwtnquestions) {
 
 
-            for (int j = 0; j < inputarray[i].length - (j + thresholdbwtwnsolutions); j++) {
-               int answer = blackcpixelsinregion(inputarray,thresholdbwtnquestions,thresholdbwtwnsolutions,i,j,numOptions,distanceToFirstQuestion);
+            for (int j = distanceToFirstQuestionhorizontal; j < inputarray[i].length - (j + thresholdbwtwnsolutions); j++) {
+               int answer = blackcpixelsinregion(inputarray,thresholdbwtnquestions,thresholdbwtwnsolutions,i,j,numOptions,distanceToFirstQuestionhorizontal);
                answerkey.add(answer);
 
 
