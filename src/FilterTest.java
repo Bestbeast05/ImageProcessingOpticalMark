@@ -112,4 +112,18 @@ public class FilterTest {
         return (double)(sum)/ x.size();
 
     }
+    public static ArrayList<Integer> itemanalysis (ArrayList<ArrayList<Integer>>studentanswers, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical ){
+        ArrayList<Integer> incorrectsum =new ArrayList<>(studentanswers.get(0).size());
+        for (int i = 0; i < studentanswers.size(); i++) {
+            for (int j = 0; j < studentanswers.get(i).size(); j++) {
+                if(studentanswers.get(i).get(j)!=readQuestions(getimage("assets/omrtest.pdf", 0),thresholdbwtnquestions,thresholdbwtwnsolutions,distanceToFirstQuestionhorizontal,numOptions,distancetofirstquestionvertical).get(j)){
+                    incorrectsum.add( j, incorrectsum.get(j)+1);
+                    incorrectsum.remove(j+1);
+                }
+            }
+
+
+        }
+        return incorrectsum;
+    }
 }
