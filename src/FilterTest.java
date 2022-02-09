@@ -98,9 +98,10 @@ public class FilterTest {
         return studentanswer;
 
     }
+    public static Array
 
 
-    public static double percentcorrect(ArrayList<Integer> x, ArrayList<Integer> answerkey) {
+    public static int numcorrect(ArrayList<Integer> x, ArrayList<Integer> answerkey) {
        int sum =0;
        if(x.size()!=answerkey.size() )return 0;
         for (int i = 0; i < x.size(); i++) {
@@ -109,7 +110,7 @@ public class FilterTest {
             }
 
         }
-        return (double)(sum)/ x.size();
+        return (sum);
 
     }
     public static ArrayList<Integer> itemanalysis (ArrayList<ArrayList<Integer>>studentanswers, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical ){
