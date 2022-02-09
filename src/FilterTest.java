@@ -98,7 +98,27 @@ public class FilterTest {
         return studentanswer;
 
     }
-    public static Array
+    public static ArrayList<String> studentresults (int numstudents, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical){
+        ArrayList<String>sturesults = new ArrayList<>();
+        ArrayList<Integer> anwerkey = readQuestions(getimage("assets/omrtest.pdf",0),thresholdbwtnquestions,thresholdbwtwnsolutions,distanceToFirstQuestionhorizontal,numOptions,distancetofirstquestionvertical);
+
+        ArrayList<ArrayList<Integer>> studentanswer = readanswers(numstudents, thresholdbwtnquestions, thresholdbwtwnsolutions, distanceToFirstQuestionhorizontal, numOptions, distancetofirstquestionvertical);
+        for (int i = 0; i < studentanswer.size(); i++) {
+            for (int j = 0; j < studentanswer.get(i).size(); j++) {
+                if(studentanswer.get(i).get(j)!= anwerkey.get(j)){
+                    sturesults.add(j +" is wrong");
+
+                }else{
+                    sturesults.add(j + " is correct");
+                }
+
+            }
+
+        }
+        return sturesults;
+
+
+    }
 
 
     public static int numcorrect(ArrayList<Integer> x, ArrayList<Integer> answerkey) {
