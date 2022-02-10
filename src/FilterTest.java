@@ -12,6 +12,7 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
+        System.out.println( itemanalysis(readanswers(6,513-476,210-172,172-(210-172),5,172),513-476,210-172,172-(210-172),5,172));
 
         //SaveAndDisplay();
 
