@@ -1,9 +1,7 @@
 package FileIO;
 
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +15,16 @@ public class PDFHelper {
 
     /***
      * Load a pdf and convert each page to a PImage.  Return a List of PImages.
-     * @param path path to the pdf including full filename and file extension
+     * @param pathToPdf path to the pdf including full filename and file extension
      * @return a List of PImage objects corresponding to the pages of the pdf
      */
-    public static ArrayList<PImage> getPImagesFromPdf(String path) {
-        InputStream is = PDFHelper.class.getResourceAsStream(path);
+    public static ArrayList<PImage> getPImagesFromPdf(String pathToPdf) {
+        // InputStream is = PDFHelper.class.getResourceAsStream(path);
         ArrayList<PImage> images = new ArrayList<PImage>();
         PDDocument pdf = null;
 
         try {
+            InputStream is = new FileInputStream(pathToPdf);
             pdf = PDDocument.load(is);
         } catch (IOException e) {
             System.out.println("Couldn't load pdf");
@@ -80,8 +79,8 @@ public class PDFHelper {
 
         List<PDPage> pages = pdf.getDocumentCatalog().getAllPages();
 
-        if (pageNum >= 0 && pageNum < pages.size()) {
-            PDPage page = pages.get(pageNum);
+        if (pageNum >= 0 && pageNum <= pages.size()) {
+            PDPage page = pages.get(pageNum-1);
 
             try {
                 BufferedImage image = page.convertToImage();
@@ -95,7 +94,10 @@ public class PDFHelper {
                 e.printStackTrace();
             }
 
-        } else return null;
+        } else {
+            System.out.println("You requested page " + pageNum + " but there are only " + pages.size() + " pages");
+            return null;
+        }
 
         try {
             pdf.close();
@@ -106,5 +108,4 @@ public class PDFHelper {
 
         return null;
     }
-
 }

@@ -1,9 +1,10 @@
 package Filters;
 
+import Interfaces.Interactive;
 import Interfaces.PixelFilter;
 import core.DImage;
 
-public class FixedThresholdFilter implements PixelFilter {
+public class FixedThresholdFilter implements PixelFilter, Interactive {
     private int threshold;
 
     public FixedThresholdFilter() {
@@ -27,5 +28,23 @@ public class FixedThresholdFilter implements PixelFilter {
         img.setPixels(grid);
         return img;
     }
+
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, DImage img) {
+        short[][]pixels = img.getBWPixelGrid();
+        short val = pixels[mouseY][mouseX];
+        System.out.println("Value at "+mouseX + " "+ mouseY+" is "+val);
+    }
+
+    @Override
+    public void keyPressed(char key) {
+        if(key == '+')
+                threshold+=20;
+        if(key == '-')
+                threshold-=20;
+        System.out.println("new threshold at "+threshold);
+    }
+
+
 }
 

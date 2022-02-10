@@ -12,9 +12,8 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
-        System.out.println("rohan beats children");
 
-        // SaveAndDisplayExample();
+        //SaveAndDisplay();
 
         RunTheFilter("assets/omrtest.pdf");
     }
@@ -31,9 +30,21 @@ public class FilterTest {
 
         }
         return images;
+
+
         // that does the image processing an returns a DTO with
         // the information you want
     }
+
+    private static void SaveAndDisplay(){
+        //for (int i = 0; i <7 ; i++) {
+            PImage image = PDFHelper.getPageImage("assets/omrtest.pdf",1);
+            image.save(currentFolder+"asset/page1.png");
+            DisplayWindow.showFor("asset/page1.png");
+       // }
+
+    }
+
 
     public static int blackcpixelsinregion(short[][] inputarray, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int inputrow, int inputcol, int numOptions, int distanceToFirstQuestionhorizontal) {
         int blackpixels = 0;
