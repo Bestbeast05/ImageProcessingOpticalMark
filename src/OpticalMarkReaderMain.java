@@ -1,14 +1,23 @@
+import FileIO.PDFHelper;
 import core.DImage;
+import processing.core.PImage;
 
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class OpticalMarkReaderMain {
     public static void main(String[] args) throws IOException {
         String pathToPdf = fileChooser("omrtest.pdf");
         System.out.println("Loading pdf at " + pathToPdf);
+
+        ArrayList<PImage> pageImages = PDFHelper.getPImagesFromPdf("assets/omrtest.pdf");
+
+
+        DImage answerkeyImage = new DImage(pageImages.get(0));
+        
 
 
 

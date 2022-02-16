@@ -3,21 +3,31 @@ import Filters.DisplayInfoFilter;
 import Interfaces.PixelFilter;
 import core.DImage;
 import core.DisplayWindow;
+import org.w3c.dom.ls.LSOutput;
 import processing.core.PImage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import static jogamp.common.os.elf.SectionArmAttributes.Tag.File;
 
 public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
-    public static void main(String[] args) {
-        System.out.println( itemanalysis(readanswers(6,513-476,210-172,172-(210-172),5,172),513-476,210-172,172-(210-172),5,172));
+    public static void main(String[] args) throws IOException {
+       // System.out.println( itemanalysis(readanswers(6,513-476,210-172,172-(210-172),5,172),513-476,210-172,172-(210-172),5,172));
 
-        //SaveAndDisplay();
-
-        RunTheFilter("assets/omrtest.pdf");
-    }
+       SaveAndDisplay();
+        //writeDataToFile("omrtest.pdf", );
+       // String data = readFile("omrtest.pdf");
+       // System.out.println("File contains: " + data);
+            }
 
     private static ArrayList<DImage> RunTheFilter(String filepath) {
         System.out.println("Loading pdf....");
@@ -38,125 +48,33 @@ public class FilterTest {
     }
 
     private static void SaveAndDisplay(){
-        //for (int i = 0; i <7 ; i++) {
             PImage image = PDFHelper.getPageImage("assets/omrtest.pdf",1);
             image.save(currentFolder+"asset/page1.png");
             DisplayWindow.showFor("asset/page1.png");
-       // }
+
 
     }
 
+    public static String readFile(String fileName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(fileName)));
+    }
 
-    public static int blackcpixelsinregion(short[][] inputarray, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int inputrow, int inputcol, int numOptions, int distanceToFirstQuestionhorizontal) {
-        int blackpixels = 0;
-        int blackcounter = 0;
-        int storedquadrant = 0;
-        int storedwor = 0;
-        for (int k = inputrow; k < inputrow + thresholdbwtnquestions; k++) {
-
-
-            for (int x = inputcol; x < inputcol + thresholdbwtwnsolutions; x++) {
-                if (inputarray[k][x] < 150) {
-                    blackcounter++;
-                    storedwor = x;
-                }
+    public static void writeDataToFile(String filePath, String data) {
+        try (FileWriter f = new FileWriter(filePath);
+             BufferedWriter b = new BufferedWriter(f);
+             PrintWriter writer = new PrintWriter(b);) {
 
 
-            }
-            if (blackcounter > blackpixels) {
-                blackpixels = blackcounter;
-
-                storedquadrant = (inputarray[0].length - distanceToFirstQuestionhorizontal) / numOptions * storedwor;
-            }
+            writer.println(data);
 
 
+        } catch (IOException error) {
+            System.err.println("There was a problem writing to the file: " + filePath);
+            error.printStackTrace();
         }
-        return storedquadrant;
-    }
-
-    public static DImage getimage(String filepath, int index) {
-        DImage getquestions = RunTheFilter(filepath).get(index);
-        return getquestions;
-
     }
 
 
-    public static ArrayList<Integer> readQuestions(DImage getquestions, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical) {
-        ArrayList<Integer> answerkey = new ArrayList<>();
-        short[][] inputarray = getquestions.getBWPixelGrid();
-        for (int i = distancetofirstquestionvertical; i < inputarray.length; i += thresholdbwtnquestions) {
 
 
-            for (int j = distanceToFirstQuestionhorizontal; j < inputarray[i].length - (j + thresholdbwtwnsolutions); j += thresholdbwtnquestions) {
-                int answer = blackcpixelsinregion(inputarray, thresholdbwtnquestions, thresholdbwtwnsolutions, i, j, numOptions, distanceToFirstQuestionhorizontal);
-                answerkey.add(answer);
-
-
-            }
-        }
-        return answerkey;
-
-
-    }
-
-    public static ArrayList<ArrayList<Integer>> readanswers(int numstudents, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical) {
-        ArrayList<ArrayList<Integer>> studentanswer = new ArrayList<>();
-        for (int i = 1; i < numstudents; i++) {
-            DImage currentstudent = getimage("C:\\Users\\adame\\IdeaProjects\\ImageProcessingOpticalMark\\assets\\omrtest.pdf", i);
-            ArrayList<Integer> currentstu = readQuestions(currentstudent, thresholdbwtnquestions, thresholdbwtwnsolutions, distanceToFirstQuestionhorizontal, numOptions, distancetofirstquestionvertical);
-            studentanswer.add(currentstu);
-
-        }
-        return studentanswer;
-
-    }
-    public static ArrayList<String> studentresults (int numstudents, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical){
-        ArrayList<String>sturesults = new ArrayList<>();
-        ArrayList<Integer> anwerkey = readQuestions(getimage("assets/omrtest.pdf",0),thresholdbwtnquestions,thresholdbwtwnsolutions,distanceToFirstQuestionhorizontal,numOptions,distancetofirstquestionvertical);
-
-        ArrayList<ArrayList<Integer>> studentanswer = readanswers(numstudents, thresholdbwtnquestions, thresholdbwtwnsolutions, distanceToFirstQuestionhorizontal, numOptions, distancetofirstquestionvertical);
-        for (int i = 0; i < studentanswer.size(); i++) {
-            for (int j = 0; j < studentanswer.get(i).size(); j++) {
-                if(studentanswer.get(i).get(j)!= anwerkey.get(j)){
-                    sturesults.add(j +" is wrong");
-
-                }else{
-                    sturesults.add(j + " is correct");
-                }
-
-            }
-
-        }
-        return sturesults;
-
-
-    }
-
-
-    public static int numcorrect(ArrayList<Integer> x, ArrayList<Integer> answerkey) {
-       int sum =0;
-       if(x.size()!=answerkey.size() )return 0;
-        for (int i = 0; i < x.size(); i++) {
-            if (x.get(i)==answerkey.get(i)){
-                sum++;
-            }
-
-        }
-        return (sum);
-
-    }
-    public static ArrayList<Integer> itemanalysis (ArrayList<ArrayList<Integer>>studentanswers, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical ){
-        ArrayList<Integer> incorrectsum =new ArrayList<>(studentanswers.get(0).size());
-        for (int i = 0; i < studentanswers.size(); i++) {
-            for (int j = 0; j < studentanswers.get(i).size(); j++) {
-                if(studentanswers.get(i).get(j)!=readQuestions(getimage("assets/omrtest.pdf", 0),thresholdbwtnquestions,thresholdbwtwnsolutions,distanceToFirstQuestionhorizontal,numOptions,distancetofirstquestionvertical).get(j)){
-                    incorrectsum.add( j, incorrectsum.get(j)+1);
-                    incorrectsum.remove(j+1);
-                }
-            }
-
-
-        }
-        return incorrectsum;
-    }
 }
