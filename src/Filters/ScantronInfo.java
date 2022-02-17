@@ -10,6 +10,13 @@ import processing.core.PImage;
 import java.util.ArrayList;
 
 public class ScantronInfo {
+    private int numstudents = 6;
+    private int thresholdbtwnquestions = 513-476;
+    private int thresholdbtwnsolutions=210-172;
+    private int distancetofirstquestionhorizontal =172;
+    private int distancetofirstquestionvertical = 476;
+    private int numoptions=5;
+
     public static void main(String[] args) {
 
         filecreater();
@@ -153,7 +160,6 @@ public class ScantronInfo {
 
     }
     public static ArrayList<Integer> itemanalysis (ArrayList<ArrayList<Integer>>studentanswers, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical ){
-        ArrayList<Integer> incorrectsum =new ArrayList<>(studentanswers.get(1).size()+1);
         ArrayList<Integer> anwerkey = new ArrayList<>();
 
         for (int j = 0; j < 4; j++) {
@@ -162,11 +168,17 @@ public class ScantronInfo {
                 anwerkey.add(readQuestions(j, 4, getimage("assets/omrtest.pdf", 0), thresholdbwtnquestions, thresholdbwtwnsolutions, distanceToFirstQuestionhorizontal, numOptions, distancetofirstquestionvertical).get(j));
             }
         }
+        ArrayList<Integer> incorrectsum =new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            incorrectsum.add(0);
+
+        }
+
         for (ArrayList<Integer> studentanswer : studentanswers) {
-            for (int j = 0; j < studentanswer.size(); j++) {
+            for (int j = 0; j < incorrectsum.size(); j++) {
                 if (!studentanswer.get(j).equals(anwerkey.get(j))) {
                     //unsure of this (j-1)
-                    incorrectsum.add(j, incorrectsum.get(j - 1) + 1);
+                    incorrectsum.add(j, incorrectsum.get(j) + 1);
                     incorrectsum.remove(j + 1);
                 }
             }
@@ -191,7 +203,8 @@ public class ScantronInfo {
     public static void writeDataToFile(String filePath, String data) {
         try (FileWriter f = new FileWriter(filePath);
              BufferedWriter b = new BufferedWriter(f);
-             PrintWriter writer = new PrintWriter(b);) {
+             PrintWriter writer = new PrintWriter(b);
+             ) {
 
 
             writer.println(data);
