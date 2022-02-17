@@ -1,13 +1,24 @@
 package Filters;
+import java.io.*;
+
 
 import FileIO.PDFHelper;
 import core.DImage;
+import org.apache.pdfbox.io.IOUtils;
 import processing.core.PImage;
 
 import java.util.ArrayList;
 
 public class ScantronInfo {
-    public ScantronInfo(){}
+    public static void main(String[] args) {
+
+        filecreater();
+        for (int i = 0; i < itemanalysis(readanswers(6,513-476,210-172,172,5,476),513-476,210-172,172,5,476).size(); i++) {
+            writeDataToFile("itemanalysis.txt",""+itemanalysis(readanswers(6,513-476,210-172,172,5,476),513-476,210-172,172,5,476).get(i));
+
+
+        }
+    }
     private static ArrayList<DImage> RunTheFilter(String filepath) {
         System.out.println("Loading pdf....");
         ArrayList<DImage> images = new ArrayList<>();
@@ -58,8 +69,7 @@ public class ScantronInfo {
     }
 
     public static DImage getimage(String filepath, int index) {
-        DImage getquestions = RunTheFilter(filepath).get(index);
-        return getquestions;
+        return RunTheFilter(filepath).get(index);
 
     }
 
@@ -112,12 +122,12 @@ public class ScantronInfo {
             }
         }
         ArrayList<ArrayList<Integer>> studentanswer = readanswers(numstudents, thresholdbwtnquestions, thresholdbwtwnsolutions, distanceToFirstQuestionhorizontal, numOptions, distancetofirstquestionvertical);
-        for (int i = 0; i < studentanswer.size(); i++) {
-            for (int j = 0; j < studentanswer.get(i).size(); j++) {
-                if(studentanswer.get(i).get(j)!= anwerkey.get(j)){
-                    sturesults.add(j +" is wrong");
+        for (ArrayList<Integer> integers : studentanswer) {
+            for (int j = 0; j < integers.size(); j++) {
+                if (!integers.get(j).equals(anwerkey.get(j))) {
+                    sturesults.add(j + " is wrong");
 
-                }else{
+                } else {
                     sturesults.add(j + " is correct");
                 }
 
@@ -134,7 +144,7 @@ public class ScantronInfo {
         int sum =0;
         if(x.size()!=answerkey.size() )return 0;
         for (int i = 0; i < x.size(); i++) {
-            if (x.get(i)==answerkey.get(i)){
+            if (x.get(i).equals(answerkey.get(i))){
                 sum++;
             }
 
@@ -143,7 +153,7 @@ public class ScantronInfo {
 
     }
     public static ArrayList<Integer> itemanalysis (ArrayList<ArrayList<Integer>>studentanswers, int thresholdbwtnquestions, int thresholdbwtwnsolutions, int distanceToFirstQuestionhorizontal, int numOptions, int distancetofirstquestionvertical ){
-        ArrayList<Integer> incorrectsum =new ArrayList<>(studentanswers.get(0).size()+1);
+        ArrayList<Integer> incorrectsum =new ArrayList<>(studentanswers.get(1).size()+1);
         ArrayList<Integer> anwerkey = new ArrayList<>();
 
         for (int j = 0; j < 4; j++) {
@@ -152,14 +162,49 @@ public class ScantronInfo {
                 anwerkey.add(readQuestions(j, 4, getimage("assets/omrtest.pdf", 0), thresholdbwtnquestions, thresholdbwtwnsolutions, distanceToFirstQuestionhorizontal, numOptions, distancetofirstquestionvertical).get(j));
             }
         }
-        for (int i = 0; i < studentanswers.size(); i++) {
-            for (int j = 0; j < studentanswers.get(i).size(); j++) {
-                if(studentanswers.get(i).get(j)!=anwerkey.get(j)){
-                    incorrectsum.add( j, incorrectsum.get(j)+1);
-                    incorrectsum.remove(j+1);
+        for (ArrayList<Integer> studentanswer : studentanswers) {
+            for (int j = 0; j < studentanswer.size(); j++) {
+                if (!studentanswer.get(j).equals(anwerkey.get(j))) {
+                    //unsure of this (j-1)
+                    incorrectsum.add(j, incorrectsum.get(j - 1) + 1);
+                    incorrectsum.remove(j + 1);
                 }
             }
         }
         return incorrectsum;
     }
+
+
+    public static void filecreater() {
+            try {
+                File myObj = new File("itemanalysis.txt");
+                if (myObj.createNewFile()) {
+                    System.out.println("File created: " + myObj.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+        }
+    public static void writeDataToFile(String filePath, String data) {
+        try (FileWriter f = new FileWriter(filePath);
+             BufferedWriter b = new BufferedWriter(f);
+             PrintWriter writer = new PrintWriter(b);) {
+
+
+            writer.println(data);
+
+
+        } catch (IOException error) {
+            System.err.println("There was a problem writing to the file: " + filePath);
+            error.printStackTrace();
+        }
+    }
+
+
+
+
+
 }
