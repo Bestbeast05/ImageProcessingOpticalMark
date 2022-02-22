@@ -88,6 +88,7 @@ public class PDFHelper {
                 PImage img = new PImage(image.getWidth(), image.getHeight(), PConstants.ARGB);
                 image.getRGB(0, 0, img.width, img.height, img.pixels, 0, img.width);
                 img.updatePixels();
+
                 return img;
             } catch (IOException e) {
                 System.out.println("problem converting to image");
