@@ -33,10 +33,10 @@ ArrayList<String> sturesults = new ArrayList<>();
 
 for (int j = 0; j <studentinput.size(); j++){
 if (!studentinput.get(j).equals(Answerkey.get(j))) {
-                    sturesults.add(j + " is wrong");
+                    sturesults.add(j+1 + " is wrong");
 
                 } else {
-                    sturesults.add(j + " is correct");
+                    sturesults.add(j+1 + " is correct");
                 }
 
             }
