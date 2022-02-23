@@ -36,7 +36,7 @@ if (!studentinput.get(j).equals(Answerkey.get(j))) {
                     sturesults.add(j+1 + " is wrong");
 
                 } else {
-                    sturesults.add(j+1 + " is correct");
+                    sturesults.add((j+1) + " is correct");
                 }
 
             }

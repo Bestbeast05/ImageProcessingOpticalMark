@@ -48,7 +48,7 @@ public class OpticalMarkReaderMain {
         Createfiletwo();
         String x = "";
         for (int i = 0; i < itemanal1.length; i++) {
-            x += itemanal1[i] + " students have gotten problem " + i +1+ " wrong \n";
+            x += itemanal1[i] + " students have gotten problem " + (i +1)+ " wrong \n";
 
 
         }
